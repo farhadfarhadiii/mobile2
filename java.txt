@@ -1,0 +1,149 @@
+package com.example.searchenginesapp;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText editUrl;
+    Button btnAdd, btnClearAll;
+    ListView listView;
+    ArrayList<String> urls = new ArrayList<>();
+    MyAdapter adapter;
+    SharedPreferences prefs;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        editUrl = findViewById(R.id.editTextUrl);
+        btnAdd = findViewById(R.id.buttonAdd);
+        btnClearAll = findViewById(R.id.buttonClearAll);
+        listView = findViewById(R.id.listViewUrls);
+
+        prefs = getSharedPreferences("data", MODE_PRIVATE);
+        loadUrls();
+
+        adapter = new MyAdapter();
+        listView.setAdapter(adapter);
+
+        btnAdd.setOnClickListener(v -> addUrl());
+        btnClearAll.setOnClickListener(v -> clearAll());
+    }
+
+    private void addUrl() {
+        String url = editUrl.getText().toString().trim();
+        if (url.isEmpty()) {
+            Toast.makeText(this, "آدرس خالی است!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!url.startsWith("http")) url = "https://" + url;
+        if (urls.contains(url)) {
+            Toast.makeText(this, "قبلاً اضافه شده!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        urls.add(url);
+        saveAndRefresh();
+        editUrl.setText("");
+    }
+
+    private void clearAll() {
+        if (urls.isEmpty()) {
+            Toast.makeText(this, "لیست خالی است!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        new AlertDialog.Builder(this)
+            .setMessage("همه آدرس‌ها حذف شوند؟")
+            .setPositiveButton("بله", (d, w) -> {
+                urls.clear();
+                saveAndRefresh();
+                Toast.makeText(this, "همه حذف شدند", Toast.LENGTH_SHORT).show();
+            })
+            .setNegativeButton("خیر", null)
+            .show();
+    }
+
+    private void saveAndRefresh() {
+        prefs.edit().putStringSet("urls", new HashSet<>(urls)).apply();
+        adapter.notifyDataSetChanged();
+    }
+
+    private void loadUrls() {
+        urls.addAll(prefs.getStringSet("urls", new HashSet<>()));
+    }
+
+    // نمایش هر آیتم: متن + دکمه حذف
+    class MyAdapter extends ArrayAdapter<String> {
+        MyAdapter() {
+            super(MainActivity.this, 0, urls);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                // ساخت دستی آیتم
+                LinearLayout item = new LinearLayout(MainActivity.this);
+                item.setOrientation(LinearLayout.HORIZONTAL);
+                item.setPadding(16, 16, 16, 16);
+                item.setBackgroundColor(0xFFFFFFFF);
+
+                // متن آدرس
+                TextView textUrl = new TextView(MainActivity.this);
+                textUrl.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                textUrl.setTextSize(16);
+                textUrl.setTextColor(0xFF000000);
+
+                // دکمه حذف
+                Button btnDelete = new Button(MainActivity.this);
+                btnDelete.setText("حذف");
+                btnDelete.setTextSize(12);
+                btnDelete.setBackgroundTintList(getColorStateList(android.R.color.holo_red_light));
+                btnDelete.setMinWidth(0);
+                btnDelete.setMinHeight(0);
+                btnDelete.setPadding(16, 8, 16, 8);
+
+                item.addView(textUrl);
+                item.addView(btnDelete);
+
+                convertView = item;
+            }
+
+            String fullUrl = urls.get(position);
+            String displayUrl = fullUrl.replace("https://", "").replace("http://", "");
+
+            TextView textUrl = (TextView) ((ViewGroup) convertView).getChildAt(0);
+            Button btnDelete = (Button) ((ViewGroup) convertView).getChildAt(1);
+
+            textUrl.setText(displayUrl);
+
+            // کلیک روی متن → باز کردن
+            textUrl.setOnClickListener(v ->
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(fullUrl))));
+
+            // دکمه حذف
+            btnDelete.setOnClickListener(v -> {
+                urls.remove(position);
+                saveAndRefresh();
+                Toast.makeText(MainActivity.this, "حذف شد", Toast.LENGTH_SHORT).show();
+            });
+
+            return convertView;
+        }
+    }
+}
