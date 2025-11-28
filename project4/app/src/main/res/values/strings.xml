@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">سوئیچ RecyclerView</string>
+    <string name="btn_switch_to_grid">سوئیچ به Grid Layout</string>
+    <string name="btn_switch_to_linear">سوئیچ به Linear Layout</string>
+    <string name="item_title_1">آیتم ۱</string>
+    <string name="item_title_2">آیتم ۲</string>
+    <string name="item_title_3">آیتم ۳</string>
+    <string name="item_title_4">آیتم ۴</string>
+    <string name="item_title_5">آیتم ۵</string>
+    <string name="item_title_6">آیتم ۶</string>
+    <string name="item_title_7">آیتم ۷</string>
+    <string name="item_title_8">آیتم ۸</string>
+    <string name="item_title_9">آیتم ۹</string>
+    <string name="item_title_10">آیتم ۱۰</string>
+    <string name="default_description">توضیحات</string>
+</resources>
