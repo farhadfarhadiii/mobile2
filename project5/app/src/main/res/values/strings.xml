@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">مدیر آدرس‌ها</string>
+
+    <string name="hint_enter_url">آدرس URL را وارد کنید</string>
+    <string name="btn_add_url">ثبت URL</string>
+
+    <string name="toast_enter_url">لطفاً آدرس را وارد کنید</string>
+    <string name="toast_url_exists">این آدرس قبلاً ثبت شده</string>
+    <string name="toast_url_added">آدرس اضافه شد</string>
+    <string name="toast_url_deleted">آدرس حذف شد</string>
+    <string name="toast_url_updated">آدرس ویرایش شد</string>
+    <string name="toast_url_cannot_empty">آدرس نمی‌تواند خالی باشد</string>
+
+    <string name="dialog_edit_title">ویرایش آدرس</string>
+    <string name="dialog_delete_title">حذف</string>
+    <string name="dialog_delete_message">آیا می‌خواهید این آدرس را حذف کنید؟</string>
+    <string name="dialog_btn_save">ذخیره</string>
+    <string name="dialog_btn_cancel">لغو</string>
+    <string name="dialog_btn_yes">بله</string>
+    <string name="dialog_btn_no">خیر</string>
+</resources>
