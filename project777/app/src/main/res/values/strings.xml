@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_title">اپلیکیشن یادداشت</string>
+    <string name="hint_username">نام خود را وارد کنید</string>
+    <string name="hint_note">یادداشت خود را بنویسید</string>
+    <string name="btn_save">ذخیره</string>
+    <string name="msg_welcome">خوش آمدی %1$s</string>
+    <string name="msg_battery">باتری: %1$d٪</string>
+    <string name="msg_note_saved">یادداشت ذخیره شد</string>
+    <string name="msg_name_saved">نام ذخیره شد</string>
+    <string name="api_ok">API OK</string>
+    <string name="api_error">خطا در API</string>
+</resources>
